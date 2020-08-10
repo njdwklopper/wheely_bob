@@ -6,6 +6,8 @@
     <string name="menu_add">Add</string>
     <string name="menu_add_title">Add a new Option</string>
 
+    <string name="error">Error</string>
+
     <string name="menu_add_button_okay">Okay</string>
     <string name="menu_add_button_cancel">Cancel</string>
 

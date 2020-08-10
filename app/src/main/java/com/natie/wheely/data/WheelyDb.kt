@@ -41,6 +41,9 @@ interface WheelOptionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOption(option: WheelOption)
 
+    @Query("SELECT COUNT(id) FROM WheelOption")
+    fun getCount(): Int
+
     @Query("DELETE FROM WheelOption WHERE id = :id")
     fun deleteOption(id: Int)
 

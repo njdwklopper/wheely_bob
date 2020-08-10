@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setMargins
+import androidx.lifecycle.Observer
 import com.natie.wheely.data.WheelyDb
 import com.natie.wheely.viewmodel.OptionsViewModel
 import com.natie.wheely.viewmodel.ViewModelFactory
@@ -23,6 +24,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val model: OptionsViewModel by viewModels {
+            ViewModelFactory(WheelyDb.getWheelyDb(this)?.optionsDao()!!)
+        }
+
+        model.error.observeForever { error ->
+            if (error.isNotEmpty()) {
+                openError(error)
+                model.error.value = ""
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -37,6 +49,13 @@ class MainActivity : AppCompatActivity() {
             openOptionEntryDiag()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun openError(message: String?) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.error))
+        builder.setMessage(message)
+        builder.show()
     }
 
     private fun openOptionEntryDiag() {
