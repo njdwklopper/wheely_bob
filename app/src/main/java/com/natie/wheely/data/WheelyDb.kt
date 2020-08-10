@@ -1,7 +1,7 @@
 package com.natie.wheely.data
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.natie.wheely.model.WheelOption
 
@@ -10,22 +10,27 @@ abstract class WheelyDb : RoomDatabase() {
     abstract fun optionsDao(): WheelOptionDao
 
     companion object {
-        var INSTANCE: WheelyDb? = null
+        private var INSTANCE: WheelyDb? = null
 
-        fun getWheelyDb(context: Context): WheelyDb? {
+        fun getWheelyDb(context: Context?): WheelyDb? {
             if (INSTANCE == null) {
                 synchronized(WheelyDb::class) {
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        WheelyDb::class.java,
-                        "WheelyDb"
-                    ).build()
+                    INSTANCE = context?.applicationContext?.let {
+                        Room.databaseBuilder(
+                            it,
+                            WheelyDb::class.java,
+                            "WheelyDb"
+                        )
+                            .allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
+                            .build()
+                    }
                 }
             }
             return INSTANCE
         }
 
-        fun destroyDataBase() {
+        fun destroySingleton() {
             INSTANCE = null
         }
     }
@@ -36,15 +41,9 @@ interface WheelOptionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOption(option: WheelOption)
 
-    @Update
-    fun updateOption(option: WheelOption)
-
-    @Delete
-    fun deleteOption(option: WheelOption)
-
-    @Query("SELECT * FROM WheelOption WHERE name == :name")
-    fun getOptionByName(name: String): List<WheelOption>
+    @Query("DELETE FROM WheelOption WHERE id = :id")
+    fun deleteOption(id: Int)
 
     @Query("SELECT * FROM WheelOption")
-    fun getOptions(): List<WheelOption>
+    fun getOptions(): LiveData<List<WheelOption>>
 }

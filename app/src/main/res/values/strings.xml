@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">Wheely</string>
+    <string name="app_name">Wheely Bob</string>
+    <string name="options_setup_title">Options Setup</string>
+    <string name="options_wheely_title">Wheel your Choice!</string>
+
+    <string name="menu_add">Add</string>
+    <string name="menu_add_title">Add a new Option</string>
+
+    <string name="menu_add_button_okay">Okay</string>
+    <string name="menu_add_button_cancel">Cancel</string>
+
+    <string name="button_done">DONE</string>
+    <string name="button_spin">SPIN</string>
 </resources>

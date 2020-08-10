@@ -1,0 +1,8 @@
+<resources>
+
+    <bool name="is_port">false</bool>
+
+    <dimen name="gutter_space">4dp</dimen>
+    <dimen name="arrow_size">34dp</dimen>
+    <dimen name="arrow_margin">1dp</dimen>
+</resources>
