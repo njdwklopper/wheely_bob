@@ -74,8 +74,11 @@ class WheelyView @JvmOverloads constructor(
 
     fun startSpin() {
         val randomStart = (1..degreeHalved.toInt()).random() * 360f
-        val randomEnd = (0..degrees.size).random() * degrees.first().second
+        var randomEnd = (0..degrees.size).random() * degrees.first().second
 
+        if (degrees.size % 2 == 0 && randomEnd.toInt() % 45 == 0) {
+            randomEnd += degreeHalved.toInt()
+        }
         val anim = ObjectAnimator.ofFloat(
             this,
             "rotation", randomStart, randomEnd
